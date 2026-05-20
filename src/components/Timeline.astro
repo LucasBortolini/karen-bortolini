@@ -1,0 +1,49 @@
+---
+interface Item {
+  title: string;
+  institution: string;
+  year: number;
+  kind: string;
+}
+
+interface Props {
+  degrees: Item[];
+  courses: Item[];
+}
+
+const { degrees, courses } = Astro.props;
+---
+
+<div class="grid gap-12 lg:grid-cols-2">
+  <div>
+    <h3 class="mb-6 font-display text-xl font-bold text-primary">Formação acadêmica</h3>
+    <ol class="relative border-l-2 border-accent/30 pl-6">
+      {
+        degrees.map((item) => (
+          <li class="mb-6 last:mb-0">
+            <span class="absolute -left-[9px] mt-1.5 h-4 w-4 rounded-full border-2 border-white bg-accent" />
+            <p class="text-sm font-semibold text-accent">{item.year}</p>
+            <p class="font-medium text-primary">{item.title}</p>
+            <p class="text-sm text-secondary">{item.institution}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <div>
+    <h3 class="mb-6 font-display text-xl font-bold text-primary">Aperfeiçoamento</h3>
+    <ol class="relative border-l-2 border-primary/20 pl-6">
+      {
+        courses.map((item) => (
+          <li class="mb-6 last:mb-0">
+            <span class="absolute -left-[9px] mt-1.5 h-4 w-4 rounded-full border-2 border-white bg-primary/40" />
+            <p class="text-sm font-semibold text-secondary/70">{item.year}</p>
+            <p class="font-medium text-primary">{item.title}</p>
+            <p class="text-sm text-secondary">{item.institution}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</div>

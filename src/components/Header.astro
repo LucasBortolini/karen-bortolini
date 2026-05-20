@@ -1,0 +1,40 @@
+---
+import { getSiteSettings, navLinks } from '../lib/site';
+import MobileNav from './MobileNav';
+
+const settings = await getSiteSettings();
+---
+
+<header class="sticky top-0 z-50 border-b border-primary/10 bg-white/95 backdrop-blur-sm relative">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <a href="/" class="group flex flex-col">
+      <span class="font-display text-lg font-bold text-primary transition-colors group-hover:text-accent md:text-xl">
+        Karen Bortolini
+      </span>
+      <span class="hidden text-xs text-secondary/70 sm:block">{settings.tagline}</span>
+    </a>
+
+    <nav class="hidden items-center gap-8 lg:flex" aria-label="Principal">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-sm font-medium text-secondary hover:text-accent"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        href={`https://wa.me/${settings.whatsapp}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary text-sm"
+      >
+        WhatsApp
+      </a>
+    </nav>
+
+    <MobileNav client:load navLinks={[...navLinks]} whatsapp={settings.whatsapp} />
+  </div>
+</header>

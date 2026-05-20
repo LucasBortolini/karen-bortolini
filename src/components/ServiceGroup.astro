@@ -1,0 +1,24 @@
+---
+import ServiceCard from './ServiceCard.astro';
+
+interface Service {
+  title: string;
+  description: string;
+}
+
+interface Props {
+  title: string;
+  services: Service[];
+}
+
+const { title, services } = Astro.props;
+---
+
+<div>
+  <h3 class="mb-6 font-display text-2xl font-bold text-primary">{title}</h3>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {services.map((service) => (
+      <ServiceCard title={service.title} description={service.description} />
+    ))}
+  </div>
+</div>

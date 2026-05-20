@@ -1,0 +1,78 @@
+---
+import { academicTypeLabels } from '../lib/utils';
+
+interface Item {
+  title: string;
+  url: string;
+  type: string;
+  year?: number;
+}
+
+interface Props {
+  items: Item[];
+  groupByType?: boolean;
+}
+
+const { items, groupByType = false } = Astro.props;
+
+const typeOrder = ['article', 'chapter', 'thesis', 'class'];
+
+function groupItems(all: Item[]) {
+  const groups: Record<string, Item[]> = {};
+  for (const item of all) {
+    if (!groups[item.type]) groups[item.type] = [];
+    groups[item.type].push(item);
+  }
+  return typeOrder
+    .filter((t) => groups[t]?.length)
+    .map((t) => ({ type: t, label: academicTypeLabels[t], items: groups[t] }));
+}
+---
+
+{
+  groupByType ? (
+    groupItems(items).map((group) => (
+      <div class="mb-10">
+        <h3 class="mb-4 font-display text-xl font-semibold text-primary">{group.label}</h3>
+        <ul class="space-y-3">
+          {group.items.map((item) => (
+            <li>
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card flex items-start justify-between gap-4 hover:ring-accent/30"
+              >
+                <span class="font-medium text-primary hover:text-accent">{item.title}</span>
+                <span class="shrink-0 text-accent" aria-hidden="true">
+                  →
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  ) : (
+    <ul class="space-y-3">
+      {items.map((item) => (
+        <li>
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card flex items-start justify-between gap-4 hover:ring-accent/30"
+          >
+            <div>
+              <span class="text-xs font-semibold uppercase text-accent">
+                {academicTypeLabels[item.type]}
+              </span>
+              <p class="mt-1 font-medium text-primary">{item.title}</p>
+            </div>
+            <span class="shrink-0 text-accent" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

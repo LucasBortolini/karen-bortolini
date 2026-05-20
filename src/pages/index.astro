@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Pillars from '../components/Pillars.astro';
+import Section from '../components/Section.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import PortfolioCard from '../components/PortfolioCard.astro';
+import AcademicList from '../components/AcademicList.astro';
+import ClientLogos from '../components/ClientLogos.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { getSiteSettings } from '../lib/site';
+import { getCollection } from 'astro:content';
+
+const settings = await getSiteSettings();
+
+const allServices = await getCollection('services');
+const comunicacao = allServices
+  .filter((s) => s.data.category === 'comunicacao')
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const ensino = allServices
+  .filter((s) => s.data.category === 'ensino')
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const portfolioFeatured = (await getCollection('portfolio'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 4);
+
+const academicFeatured = (await getCollection('academic'))
+  .filter((a) => a.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 4);
+---
+
+<BaseLayout title={settings.meta.homeTitle} description={settings.meta.homeDescription}>
+  <Hero />
+  <Pillars />
+
+  <Section title="Serviços" subtitle="O que faço" variant="light">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div>
+        <h3 class="mb-4 font-display text-lg font-semibold text-primary">
+          Comunicação estratégica e audiovisual
+        </h3>
+        <div class="space-y-4">
+          {comunicacao.map((s) => (
+            <ServiceCard title={s.data.title} description={s.data.description} />
+          ))}
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-4 font-display text-lg font-semibold text-primary">
+          Ensino e produção educacional
+        </h3>
+        <div class="space-y-4">
+          {ensino.map((s) => (
+            <ServiceCard title={s.data.title} description={s.data.description} />
+          ))}
+        </div>
+      </div>
+    </div>
+    <div class="mt-10 text-center">
+      <a href="/servicos/" class="btn-secondary"> Ver todos os serviços </a>
+    </div>
+  </Section>
+
+  <Section title="Portfólio em destaque" subtitle="Trabalhos recentes" variant="white">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {portfolioFeatured.map((p) => (
+        <PortfolioCard
+          title={p.data.title}
+          url={p.data.url}
+          type={p.data.type}
+          group={p.data.group}
+        />
+      ))}
+    </div>
+    <div class="mt-10 text-center">
+      <a href="/portfolio/" class="btn-secondary"> Ver portfólio completo </a>
+    </div>
+  </Section>
+
+  <Section title="Produção acadêmica" subtitle="Pesquisa e ensino" variant="light">
+    <AcademicList
+      items={academicFeatured.map((a) => ({
+        title: a.data.title,
+        url: a.data.url,
+        type: a.data.type,
+        year: a.data.year,
+      }))}
+    />
+    <div class="mt-8 text-center">
+      <a href="/producao-academica/" class="btn-secondary"> Ver produção completa </a>
+    </div>
+  </Section>
+
+  <ClientLogos />
+  <CtaBanner />
+</BaseLayout>

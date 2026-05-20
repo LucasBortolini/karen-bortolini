@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import { getSiteSettings, whatsappUrl } from '../lib/site';
+
+const settings = await getSiteSettings();
+const waLink = whatsappUrl(
+  settings.whatsapp,
+  'Olá! Gostaria de conversar sobre seus serviços.',
+);
+---
+
+<BaseLayout
+  title="Contato | Karen Bortolini"
+  description="Entre em contato com Karen Bortolini por WhatsApp, e-mail, Instagram ou LinkedIn."
+>
+  <Section variant="white" class="pt-8">
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">Contato</p>
+    <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Vamos conversar</h1>
+    <p class="mt-4 max-w-2xl text-lg text-secondary">
+      Tire dúvidas sobre serviços, projetos acadêmicos ou parcerias institucionais. Prefira
+      WhatsApp ou e-mail — resposta o mais breve possível.
+    </p>
+    <a
+      href={waLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-primary mt-8 inline-flex"
+    >
+      Chamar no WhatsApp
+    </a>
+  </Section>
+
+  <Section variant="light" title="Canais de contato">
+    <ul class="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2">
+      <li class="card">
+        <p class="text-sm font-semibold text-accent">WhatsApp</p>
+        <a
+          href={waLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-1 block text-lg font-medium text-primary hover:text-cta"
+        >
+          {settings.whatsappDisplay}
+        </a>
+      </li>
+      <li class="card">
+        <p class="text-sm font-semibold text-accent">E-mail</p>
+        <a
+          href={`mailto:${settings.email}`}
+          class="mt-1 block text-lg font-medium text-primary hover:text-accent break-all"
+        >
+          {settings.email}
+        </a>
+      </li>
+      <li class="card">
+        <p class="text-sm font-semibold text-accent">Instagram</p>
+        <a
+          href={settings.instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-1 block font-medium text-primary hover:text-accent"
+        >
+          {settings.instagram}
+        </a>
+      </li>
+      <li class="card">
+        <p class="text-sm font-semibold text-accent">LinkedIn</p>
+        <a
+          href={settings.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-1 block font-medium text-primary hover:text-accent"
+        >
+          linkedin.com/in/karen-bortolini
+        </a>
+      </li>
+      <li class="card sm:col-span-2">
+        <p class="text-sm font-semibold text-accent">Currículo Lattes</p>
+        <a
+          href={settings.lattes}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-1 block font-medium text-primary hover:text-accent"
+        >
+          Acessar Lattes →
+        </a>
+      </li>
+    </ul>
+  </Section>
+</BaseLayout>

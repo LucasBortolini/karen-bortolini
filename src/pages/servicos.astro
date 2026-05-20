@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import ServiceGroup from '../components/ServiceGroup.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { getCollection } from 'astro:content';
+
+const allServices = await getCollection('services');
+
+const comunicacao = allServices
+  .filter((s) => s.data.category === 'comunicacao')
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((s) => s.data);
+
+const ensino = allServices
+  .filter((s) => s.data.category === 'ensino')
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((s) => s.data);
+---
+
+<BaseLayout
+  title="Serviços | Karen Bortolini"
+  description="Comunicação estratégica, conteúdo multimídia, assessoria de imprensa, design instrucional e EaD."
+>
+  <Section variant="white" class="pt-8">
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">Serviços</p>
+    <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Como posso ajudar</h1>
+    <p class="mt-4 max-w-2xl text-lg text-secondary">
+      Soluções em comunicação estratégica, produção multimídia e educação digital para empresas,
+      instituições e projetos acadêmicos.
+    </p>
+  </Section>
+
+  <Section variant="light">
+    <div class="space-y-16">
+      <ServiceGroup title="Comunicação estratégica e audiovisual" services={comunicacao} />
+      <ServiceGroup title="Ensino e produção educacional" services={ensino} />
+    </div>
+  </Section>
+
+  <CtaBanner />
+</BaseLayout>

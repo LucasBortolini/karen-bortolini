@@ -1,0 +1,65 @@
+---
+import { getSiteSettings, navLinks } from '../lib/site';
+
+const settings = await getSiteSettings();
+const year = new Date().getFullYear();
+---
+
+<footer class="section-dark py-12">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-10 md:grid-cols-3">
+      <div>
+        <p class="font-display text-xl font-bold text-white">Karen Bortolini</p>
+        <p class="mt-2 text-sm text-white/80">{settings.footerTagline}</p>
+      </div>
+
+      <div>
+        <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-accent">Navegação</p>
+        <ul class="space-y-2">
+          {
+            navLinks.map((link) => (
+              <li>
+                <a href={link.href} class="text-sm text-white/80 hover:text-white">
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-accent">Contato</p>
+        <ul class="space-y-2 text-sm text-white/80">
+          <li>
+            <a href={`https://wa.me/${settings.whatsapp}`} target="_blank" rel="noopener noreferrer" class="hover:text-white">
+              WhatsApp: {settings.whatsappDisplay}
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${settings.email}`} class="hover:text-white">{settings.email}</a>
+          </li>
+          <li>
+            <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" class="hover:text-white">
+              Instagram {settings.instagram}
+            </a>
+          </li>
+          <li>
+            <a href={settings.linkedin} target="_blank" rel="noopener noreferrer" class="hover:text-white">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href={settings.lattes} target="_blank" rel="noopener noreferrer" class="hover:text-white">
+              Currículo Lattes
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 border-t border-white/20 pt-6 text-center text-sm text-white/60">
+      <p>&copy; {year} Karen Bortolini. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>

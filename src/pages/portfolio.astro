@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import PortfolioGrid from '../components/PortfolioGrid';
+import CtaBanner from '../components/CtaBanner.astro';
+import { getCollection } from 'astro:content';
+import { youtubeThumbnail } from '../lib/utils';
+
+const portfolio = (await getCollection('portfolio')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const items = portfolio.map((p) => ({
+  id: p.id,
+  title: p.data.title,
+  url: p.data.url,
+  type: p.data.type,
+  group: p.data.group,
+  thumb: youtubeThumbnail(p.data.url),
+}));
+---
+
+<BaseLayout
+  title="Portfólio | Karen Bortolini"
+  description="Produções audiovisuais, editoriais e institucionais — telejornal, documentários, boletins e revistas."
+>
+  <Section variant="white" class="pt-8">
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">Portfólio</p>
+    <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Trabalhos realizados</h1>
+    <p class="mt-4 max-w-2xl text-lg text-secondary">
+      Seleção de projetos em vídeo, editorial e materiais institucionais.
+    </p>
+  </Section>
+
+  <Section variant="light">
+    <PortfolioGrid client:load items={items} />
+  </Section>
+
+  <CtaBanner />
+</BaseLayout>

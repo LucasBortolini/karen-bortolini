@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Timeline from '../components/Timeline.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { getSiteSettings } from '../lib/site';
+import { getCollection } from 'astro:content';
+
+const settings = await getSiteSettings();
+
+const education = await getCollection('education');
+const degrees = education
+  .filter((e) => e.data.kind === 'degree')
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((e) => e.data);
+
+const courses = education
+  .filter((e) => e.data.kind === 'course')
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((e) => e.data);
+---
+
+<BaseLayout
+  title="Sobre | Karen Bortolini"
+  description="Jornalista, doutora e pós-doutora em Comunicação. Trajetória em comunicação estratégica, multimídia e educação digital."
+>
+  <Section variant="white" class="pt-8">
+    <div class="mx-auto max-w-3xl">
+      <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">Sobre</p>
+      <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Karen Bortolini</h1>
+      <p class="mt-2 text-lg text-secondary">{settings.tagline}</p>
+
+      <div class="mt-8 space-y-4 text-base leading-relaxed text-secondary">
+        {settings.aboutBio.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+
+      <a
+        href={settings.lattes}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-6 inline-flex items-center gap-2 font-semibold text-accent hover:text-primary"
+      >
+        Currículo Lattes
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </Section>
+
+  <Section title="Formação e atualização" variant="light">
+    <Timeline degrees={degrees} courses={courses} />
+  </Section>
+
+  <CtaBanner />
+</BaseLayout>
