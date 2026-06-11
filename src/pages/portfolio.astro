@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import PortfolioGrid from '../components/PortfolioGrid';
-import CtaBanner from '../components/CtaBanner.astro';
 import { getCollection } from 'astro:content';
 import { youtubeThumbnail } from '../lib/utils';
 
@@ -25,7 +24,7 @@ const items = portfolio.map((p) => ({
   description="Produções audiovisuais, editoriais e institucionais — telejornal, documentários, boletins e revistas."
 >
   <Section variant="white" class="pt-8">
-    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">Portfólio</p>
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">Portfólio</p>
     <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Trabalhos realizados</h1>
     <p class="mt-4 max-w-2xl text-lg text-secondary">
       Seleção de projetos em vídeo, editorial e materiais institucionais.
@@ -36,5 +35,4 @@ const items = portfolio.map((p) => ({
     <PortfolioGrid client:load items={items} />
   </Section>
 
-  <CtaBanner />
 </BaseLayout>

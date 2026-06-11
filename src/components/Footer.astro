@@ -1,65 +1,60 @@
 ---
-import { getSiteSettings, navLinks } from '../lib/site';
+import { getSiteSettings } from '../lib/site';
 
 const settings = await getSiteSettings();
 const year = new Date().getFullYear();
+
 ---
 
-<footer class="section-dark py-12">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div class="grid gap-10 md:grid-cols-3">
-      <div>
-        <p class="font-display text-xl font-bold text-white">Karen Bortolini</p>
-        <p class="mt-2 text-sm text-white/80">{settings.footerTagline}</p>
+<footer class="section-dark border-t border-white/10">
+  <div class="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-14 lg:px-8">
+    <div class="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+      <div class="space-y-4">
+        <a href="/" class="inline-block">
+          <img
+            src="/logo.png"
+            alt={settings.siteName}
+            width="477"
+            height="633"
+            class="h-14 w-auto"
+            decoding="async"
+          />
+        </a>
+        <p class="max-w-md text-sm leading-relaxed text-white/60">{settings.footerTagline}</p>
+
+        <nav
+          class="flex flex-nowrap items-center gap-2 overflow-x-auto text-sm whitespace-nowrap"
+          aria-label="Contato"
+        >
+          <a
+            href={`https://wa.me/${settings.whatsapp}`}
+            class="footer-contact-link shrink-0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            WhatsApp
+          </a>
+          <span class="text-white/25" aria-hidden="true">·</span>
+          <a href={`mailto:${settings.email}`} class="footer-contact-link shrink-0">
+            {settings.email}
+          </a>
+          <span class="text-white/25" aria-hidden="true">·</span>
+          <a
+            href={settings.linkedin}
+            class="footer-contact-link shrink-0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
+        </nav>
       </div>
 
-      <div>
-        <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-accent">Navegação</p>
-        <ul class="space-y-2">
-          {
-            navLinks.map((link) => (
-              <li>
-                <a href={link.href} class="text-sm text-white/80 hover:text-white">
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      <div>
-        <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-accent">Contato</p>
-        <ul class="space-y-2 text-sm text-white/80">
-          <li>
-            <a href={`https://wa.me/${settings.whatsapp}`} target="_blank" rel="noopener noreferrer" class="hover:text-white">
-              WhatsApp: {settings.whatsappDisplay}
-            </a>
-          </li>
-          <li>
-            <a href={`mailto:${settings.email}`} class="hover:text-white">{settings.email}</a>
-          </li>
-          <li>
-            <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" class="hover:text-white">
-              Instagram {settings.instagram}
-            </a>
-          </li>
-          <li>
-            <a href={settings.linkedin} target="_blank" rel="noopener noreferrer" class="hover:text-white">
-              LinkedIn
-            </a>
-          </li>
-          <li>
-            <a href={settings.lattes} target="_blank" rel="noopener noreferrer" class="hover:text-white">
-              Currículo Lattes
-            </a>
-          </li>
-        </ul>
-      </div>
+      <a href="/contato/" class="btn-primary shrink-0 self-start lg:self-auto">Contato</a>
     </div>
 
-    <div class="mt-10 border-t border-white/20 pt-6 text-center text-sm text-white/60">
-      <p>&copy; {year} Karen Bortolini. Todos os direitos reservados.</p>
-    </div>
+    <p class="mt-10 text-xs text-white/40 lg:mt-12">
+      &copy; {year} {settings.siteName}
+    </p>
   </div>
 </footer>

@@ -5,10 +5,12 @@ export default {
     extend: {
       colors: {
         primary: '#1F3A5F',
-        secondary: '#2E2E2E',
-        accent: '#2CA58D',
-        surface: '#F5F5F5',
-        cta: '#E76F51',
+        secondary: '#3D3549',
+        gold: '#D4A054',
+        surface: '#FAF7F2',
+        cta: '#C75B3A',
+        'whatsapp-surface': '#ECE5DD',
+        'whatsapp-brand': '#075E54',
       },
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],

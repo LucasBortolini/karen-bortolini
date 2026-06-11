@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import Timeline from '../components/Timeline.astro';
-import CtaBanner from '../components/CtaBanner.astro';
 import { getSiteSettings } from '../lib/site';
 import { getCollection } from 'astro:content';
 
@@ -26,7 +25,7 @@ const courses = education
 >
   <Section variant="white" class="pt-8">
     <div class="mx-auto max-w-3xl">
-      <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">Sobre</p>
+      <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">Sobre</p>
       <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Karen Bortolini</h1>
       <p class="mt-2 text-lg text-secondary">{settings.tagline}</p>
 
@@ -38,7 +37,7 @@ const courses = education
         href={settings.lattes}
         target="_blank"
         rel="noopener noreferrer"
-        class="mt-6 inline-flex items-center gap-2 font-semibold text-accent hover:text-primary"
+        class="mt-6 inline-flex items-center gap-2 font-semibold text-gold hover:text-primary"
       >
         Currículo Lattes
         <span aria-hidden="true">→</span>
@@ -50,5 +49,4 @@ const courses = education
     <Timeline degrees={degrees} courses={courses} />
   </Section>
 
-  <CtaBanner />
 </BaseLayout>

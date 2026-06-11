@@ -51,7 +51,7 @@ export default function PortfolioGrid({ items }: Props) {
             role="tab"
             aria-selected={active === filter}
             onClick={() => setActive(filter)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 ${
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 ${
               active === filter
                 ? 'bg-primary text-white'
                 : 'bg-white text-secondary ring-1 ring-primary/10 hover:bg-surface'
@@ -89,15 +89,19 @@ export default function PortfolioGrid({ items }: Props) {
                     </span>
                   </div>
                 )}
-                <span className="absolute left-3 top-3 rounded-full bg-accent px-2 py-0.5 text-xs font-semibold text-white">
+                <span
+                  className={`absolute left-3 top-3 rounded-full px-2 py-0.5 text-xs font-semibold text-white ${
+                    item.type === 'video' ? 'bg-recording' : 'bg-gold'
+                  }`}
+                >
                   {filterLabels[item.type] ?? item.type}
                 </span>
               </div>
               <div className="p-4">
                 {item.group && (
-                  <p className="text-xs font-medium text-accent">{item.group}</p>
+                  <p className="text-xs font-medium text-gold">{item.group}</p>
                 )}
-                <h3 className="mt-1 font-display text-base font-semibold text-primary group-hover:text-accent">
+                <h3 className="mt-1 font-display text-base font-semibold text-primary group-hover:text-gold">
                   {item.title}
                 </h3>
                 <p className="mt-2 text-xs text-secondary/70">Abrir projeto →</p>

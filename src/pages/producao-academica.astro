@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import AcademicList from '../components/AcademicList.astro';
-import CtaBanner from '../components/CtaBanner.astro';
 import { getCollection } from 'astro:content';
 
 const academic = (await getCollection('academic')).sort(
@@ -22,7 +21,7 @@ const items = academic.map((a) => ({
   description="Artigos científicos, capítulos de livros, tese de doutorado e videoaulas da Profª. Drª. Karen Bortolini."
 >
   <Section variant="white" class="pt-8">
-    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">
       Produção acadêmica
     </p>
     <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">
@@ -37,5 +36,4 @@ const items = academic.map((a) => ({
     <AcademicList items={items} groupByType={true} />
   </Section>
 
-  <CtaBanner />
 </BaseLayout>

@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import ServiceGroup from '../components/ServiceGroup.astro';
-import CtaBanner from '../components/CtaBanner.astro';
 import { getCollection } from 'astro:content';
 
 const allServices = await getCollection('services');
@@ -23,7 +22,7 @@ const ensino = allServices
   description="Comunicação estratégica, conteúdo multimídia, assessoria de imprensa, design instrucional e EaD."
 >
   <Section variant="white" class="pt-8">
-    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">Serviços</p>
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">Serviços</p>
     <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Como posso ajudar</h1>
     <p class="mt-4 max-w-2xl text-lg text-secondary">
       Soluções em comunicação estratégica, produção multimídia e educação digital para empresas,
@@ -38,5 +37,4 @@ const ensino = allServices
     </div>
   </Section>
 
-  <CtaBanner />
 </BaseLayout>

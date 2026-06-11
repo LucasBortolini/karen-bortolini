@@ -7,7 +7,6 @@ import ServiceCard from '../components/ServiceCard.astro';
 import PortfolioCard from '../components/PortfolioCard.astro';
 import AcademicList from '../components/AcademicList.astro';
 import ClientLogos from '../components/ClientLogos.astro';
-import CtaBanner from '../components/CtaBanner.astro';
 import { getSiteSettings } from '../lib/site';
 import { getCollection } from 'astro:content';
 
@@ -98,5 +97,4 @@ const academicFeatured = (await getCollection('academic'))
   </Section>
 
   <ClientLogos />
-  <CtaBanner />
 </BaseLayout>
