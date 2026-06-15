@@ -1,15 +1,16 @@
 ---
-import { portfolioTypeLabels, youtubeThumbnail } from '../lib/utils';
+import { portfolioTypeLabels, portfolioThumbnail } from '../lib/utils';
 
 interface Props {
   title: string;
   url: string;
   type: string;
   group?: string;
+  image?: string;
 }
 
-const { title, url, type, group } = Astro.props;
-const thumb = youtubeThumbnail(url);
+const { title, url, type, group, image } = Astro.props;
+const thumb = portfolioThumbnail(url, image);
 const typeLabel = portfolioTypeLabels[type] ?? type;
 ---
 

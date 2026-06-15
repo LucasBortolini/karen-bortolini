@@ -5,7 +5,7 @@ import Section from '../components/Section.astro';
 import PortfolioGrid from '../components/PortfolioGrid';
 import { pageBanners } from '../lib/banners';
 import { getCollection } from 'astro:content';
-import { youtubeThumbnail } from '../lib/utils';
+import { portfolioThumbnail } from '../lib/utils';
 
 const portfolio = (await getCollection('portfolio')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -17,7 +17,7 @@ const items = portfolio.map((p) => ({
   url: p.data.url,
   type: p.data.type,
   group: p.data.group,
-  thumb: youtubeThumbnail(p.data.url),
+  thumb: portfolioThumbnail(p.data.url, p.data.image),
 }));
 ---
 

@@ -15,6 +15,10 @@ export function youtubeThumbnail(url: string): string | null {
   return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 }
 
+export function portfolioThumbnail(url: string, image?: string): string | null {
+  return image ?? youtubeThumbnail(url);
+}
+
 export const portfolioTypeLabels: Record<string, string> = {
   video: 'Vídeo',
   editorial: 'Editorial',
