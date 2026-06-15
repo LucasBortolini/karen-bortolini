@@ -29,6 +29,13 @@ export const academicTypeLabels: Record<string, string> = {
   class: 'Aula',
 };
 
+export const academicGroupLabels: Record<string, string> = {
+  article: 'Artigos',
+  chapter: 'Capítulos',
+  thesis: 'Tese',
+  class: 'Aulas',
+};
+
 export const filterLabels: Record<string, string> = {
   all: 'Todos',
   video: 'Vídeo',

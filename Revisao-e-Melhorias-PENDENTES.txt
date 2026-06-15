@@ -1,0 +1,16 @@
+Revisão e Melhorias — PENDÊNCIAS
+(itens já feitos no site foram removidos deste documento)
+
+
+SERVIÇOS
+- Adicionar imagens reais em cada card (campo image nos YAML em src/content/services/ ou pasta public/images/services/)
+
+
+PORTFÓLIO
+- Adicionar itens mais atuais (ex.: e-Book da FecomércioSP e algo de redes sociais) — enviar links e títulos para cadastro.
+- No filtro "Institucional": exibir os logos das empresas/instituições (confirmar se substitui a faixa de logos da Home ou aparece nos dois lugares).
+- Evitar linha com um único card no grid (depende dos novos itens cadastrados).
+
+
+EXTRA
+- Foto profissional da Karen no hero (substituir placeholder "KB").

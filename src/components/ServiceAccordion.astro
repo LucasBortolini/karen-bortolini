@@ -1,0 +1,498 @@
+---
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  body: string;
+  image?: string;
+  category: 'comunicacao' | 'ensino';
+}
+
+interface Group {
+  title: string;
+  services: Service[];
+}
+
+interface Props {
+  groups: Group[];
+  columnId: string;
+}
+
+const { groups, columnId } = Astro.props;
+
+const mediaBackground: Record<Service['category'], string> = {
+  comunicacao:
+    'linear-gradient(160deg, #1a3354 0%, #1f3a5f 45%, #2d5280 100%)',
+  ensino: 'linear-gradient(160deg, #145a50 0%, #1a5c52 45%, #2ca58d 100%)',
+};
+
+const servicesIndex = Object.fromEntries(
+  groups.flatMap((g) => g.services).map((s) => [s.id, s]),
+);
+---
+
+<div class="service-root" data-service-root={columnId}>
+  {
+    groups.map((group) => (
+      <section class="service-group">
+        <header class="service-group__header">
+          <h3 class="service-group__title">{group.title}</h3>
+        </header>
+        <ul class="service-group__grid" role="list">
+          {group.services.map((service) => (
+            <li>
+              <button
+                type="button"
+                class="service-card"
+                data-service-card
+                data-service-id={service.id}
+                aria-haspopup="dialog"
+                aria-label={`${service.title}. ${service.description}`}
+              >
+                <div
+                  class:list={[
+                    'service-card__media',
+                    !service.image && 'service-card__media--placeholder',
+                  ]}
+                  style={
+                    service.image
+                      ? undefined
+                      : `background: ${mediaBackground[service.category]}`
+                  }
+                >
+                  {service.image ? (
+                    <img src={service.image} alt="" loading="lazy" />
+                  ) : (
+                    <span class="service-card__media-glow" aria-hidden="true" />
+                  )}
+                </div>
+                <div class="service-card__body">
+                  <h4 class="service-card__title">{service.title}</h4>
+                </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+
+  <div class="service-modal" data-service-modal hidden>
+    <div class="service-modal__backdrop" data-service-close tabindex="-1" aria-hidden="true" />
+    <div
+      class="service-modal__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`service-modal-title-${columnId}`}
+    >
+      <div class="service-modal__media-wrap">
+        <img class="service-modal__image" alt="" data-service-modal-image />
+        <div
+          class="service-modal__placeholder"
+          data-service-modal-placeholder
+          hidden
+          aria-hidden="true"
+        />
+        <button
+          type="button"
+          class="service-modal__close"
+          data-service-close
+          aria-label="Fechar"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="service-modal__content">
+        <h2 class="service-modal__title" id={`service-modal-title-${columnId}`} data-service-modal-title />
+        <div class="service-modal__text" data-service-modal-text />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ servicesIndex, columnId, mediaBackground }}>
+  function initServiceModal() {
+    const root = document.querySelector(`[data-service-root="${columnId}"]`);
+    if (!root || root.dataset.bound === 'true') return;
+    root.dataset.bound = 'true';
+
+    const modal = root.querySelector('[data-service-modal]');
+    const modalImage = root.querySelector('[data-service-modal-image]');
+    const modalPlaceholder = root.querySelector('[data-service-modal-placeholder]');
+    const modalTitle = root.querySelector('[data-service-modal-title]');
+    const modalText = root.querySelector('[data-service-modal-text]');
+
+    if (!modal || !modalImage || !modalPlaceholder || !modalTitle || !modalText) return;
+
+    let lastFocus = null;
+
+    function openModal(serviceId) {
+      const service = servicesIndex[serviceId];
+      if (!service) return;
+
+      lastFocus = document.activeElement;
+
+      modalTitle.textContent = service.title;
+      modalText.innerHTML = service.body
+        .split('\n\n')
+        .map((p) => `<p>${p}</p>`)
+        .join('');
+
+      if (service.image) {
+        modalImage.src = service.image;
+        modalImage.hidden = false;
+        modalPlaceholder.hidden = true;
+      } else {
+        modalImage.hidden = true;
+        modalImage.removeAttribute('src');
+        modalPlaceholder.hidden = false;
+        modalPlaceholder.style.background = mediaBackground[service.category];
+      }
+
+      modal.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => {
+        modal.classList.add('service-modal--open');
+        root.querySelector('.service-modal__close')?.focus();
+      });
+    }
+
+    function closeModal() {
+      modal.classList.remove('service-modal--open');
+      document.body.style.overflow = '';
+      window.setTimeout(() => modal.setAttribute('hidden', ''), 280);
+      if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+    }
+
+    root.addEventListener('click', (e) => {
+      const card = e.target.closest('[data-service-card]');
+      if (card) {
+        openModal(card.dataset.serviceId);
+        return;
+      }
+      if (e.target.closest('[data-service-close]')) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.hasAttribute('hidden')) closeModal();
+    });
+  }
+
+  initServiceModal();
+  document.addEventListener('astro:page-load', initServiceModal);
+</script>
+
+<style>
+  .service-root {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .service-root {
+      gap: 3.5rem;
+    }
+  }
+
+  .service-group__header {
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid rgb(212 160 84 / 35%);
+  }
+
+  @media (min-width: 768px) {
+    .service-group__header {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .service-group__title {
+    margin: 0;
+    font-family: Fraunces, Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #1f3a5f;
+  }
+
+  @media (min-width: 768px) {
+    .service-group__title {
+      font-size: 1.375rem;
+    }
+  }
+
+  .service-group__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.875rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .service-group__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.125rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .service-group__grid {
+      gap: 1.25rem;
+    }
+  }
+
+  .service-group__grid > li {
+    min-width: 0;
+  }
+
+  /* Card quadrado — imagem retangular (paisagem) + faixa de título */
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    padding: 0;
+    border: none;
+    border-radius: 0.875rem;
+    background: #162033;
+    box-shadow: 0 2px 12px rgb(22 32 51 / 12%);
+    cursor: pointer;
+    text-align: left;
+    overflow: hidden;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  @media (min-width: 640px) {
+    .service-card {
+      border-radius: 1rem;
+    }
+  }
+
+  .service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgb(22 32 51 / 18%);
+  }
+
+  .service-card:focus-visible {
+    outline: 2px solid #d4a054;
+    outline-offset: 3px;
+  }
+
+  .service-card__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #1f3a5f;
+  }
+
+  .service-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+
+  .service-card:hover .service-card__media img {
+    transform: scale(1.04);
+  }
+
+  .service-card__media--placeholder .service-card__media-glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 80% at 20% 15%, rgb(212 160 84 / 20%), transparent 50%),
+      radial-gradient(ellipse 60% 50% at 90% 90%, rgb(255 255 255 / 7%), transparent 45%);
+  }
+
+  .service-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding: 0.625rem 0.75rem;
+    background: #1f3a5f;
+    border-top: 1px solid rgb(212 160 84 / 15%);
+  }
+
+  @media (min-width: 640px) {
+    .service-card__body {
+      padding: 0.75rem 0.875rem;
+    }
+  }
+
+  .service-card__title {
+    margin: 0;
+    font-family: Fraunces, Georgia, serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #d4a054;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (min-width: 640px) {
+    .service-card__title {
+      font-size: 0.9375rem;
+      -webkit-line-clamp: 3;
+    }
+  }
+
+  /* Modal */
+  .service-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .service-modal[hidden] {
+    display: none !important;
+  }
+
+  .service-modal--open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .service-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 78%);
+    backdrop-filter: blur(4px);
+  }
+
+  .service-modal__panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 28rem;
+    max-height: min(90vh, 44rem);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: #1a2233;
+    box-shadow: 0 24px 64px rgb(0 0 0 / 45%);
+    transform: scale(0.94) translateY(12px);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .service-modal--open .service-modal__panel {
+    transform: scale(1) translateY(0);
+  }
+
+  .service-modal__media-wrap {
+    position: relative;
+    flex-shrink: 0;
+    aspect-ratio: 16 / 10;
+    background: #1f3a5f;
+    overflow: hidden;
+  }
+
+  .service-modal__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .service-modal__placeholder {
+    position: absolute;
+    inset: 0;
+  }
+
+  .service-modal__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    background: rgb(0 0 0 / 55%);
+    color: #d4a054;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .service-modal__close:hover {
+    background: rgb(0 0 0 / 75%);
+  }
+
+  .service-modal__close:focus-visible {
+    outline: 2px solid #d4a054;
+    outline-offset: 2px;
+  }
+
+  .service-modal__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem 1.375rem 1.5rem;
+    background: #1a2233;
+  }
+
+  .service-modal__title {
+    margin: 0 0 0.875rem;
+    font-family: Fraunces, Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #d4a054;
+  }
+
+  .service-modal__text {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: rgb(255 255 255 / 88%);
+  }
+
+  .service-modal__text :global(p) {
+    margin: 0 0 0.875rem;
+  }
+
+  .service-modal__text :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  @media (min-width: 640px) {
+    .service-modal {
+      padding: 1.5rem;
+    }
+
+    .service-modal__panel {
+      max-width: 32rem;
+    }
+
+    .service-modal__title {
+      font-size: 1.375rem;
+    }
+  }
+</style>

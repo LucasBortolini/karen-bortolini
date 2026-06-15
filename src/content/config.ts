@@ -6,6 +6,8 @@ const services = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
+    body: z.string(),
+    image: z.string().optional(),
     category: z.enum(['comunicacao', 'ensino']),
     order: z.number(),
   }),
@@ -62,7 +64,7 @@ const site = defineCollection({
     lattes: z.string().url(),
     heroTitle: z.string(),
     heroSubtitle: z.string(),
-    heroSummary: z.string(),
+    heroParagraphs: z.array(z.string()),
     aboutBio: z.array(z.string()),
     meta: z.object({
       homeTitle: z.string(),
