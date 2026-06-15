@@ -1,0 +1,199 @@
+---
+interface Props {
+  image: string;
+  label: string;
+  title: string;
+  description?: string;
+  imagePosition?: string;
+  class?: string;
+}
+
+const {
+  image,
+  label,
+  title,
+  description,
+  imagePosition = 'center center',
+  class: className = '',
+} = Astro.props;
+---
+
+<section class:list={['page-hero', className]} aria-labelledby="page-hero-title">
+  <div class="page-hero__media" aria-hidden="true">
+    <img
+      class="page-hero__image"
+      src={image}
+      alt=""
+      loading="eager"
+      fetchpriority="high"
+      style={`object-position: ${imagePosition}`}
+    />
+    <div class="page-hero__shade" />
+    <div class="page-hero__fade" />
+  </div>
+
+  <div class="page-hero__header-gap" aria-hidden="true"></div>
+
+  <div class="page-hero__content">
+    <div class="site-container page-hero__inner">
+      <p class="page-hero__label">{label}</p>
+      <span class="page-hero__accent" aria-hidden="true" />
+      <h1 id="page-hero-title" class="page-hero__title">{title}</h1>
+      {description && <p class="page-hero__description">{description}</p>}
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: calc(var(--site-header-height) + clamp(20rem, 48vh, 26rem));
+  }
+
+  @media (min-width: 640px) {
+    .page-hero {
+      min-height: calc(var(--site-header-height) + clamp(17rem, 38vh, 24rem));
+    }
+  }
+
+  .page-hero__media {
+    position: absolute;
+    inset-inline: 0;
+    top: calc(-1 * var(--site-header-height));
+    bottom: 0;
+    z-index: 0;
+  }
+
+  .page-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    filter: blur(5px) saturate(0.85);
+  }
+
+  .page-hero__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        160deg,
+        rgb(31 58 95 / 72%) 0%,
+        rgb(28 52 84 / 68%) 50%,
+        rgb(22 42 68 / 78%) 100%
+      ),
+      rgb(31 58 95 / 35%);
+  }
+
+  .page-hero__fade {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 1;
+    height: 5rem;
+    background: linear-gradient(to bottom, transparent, var(--color-surface));
+    pointer-events: none;
+  }
+
+  /* Reserva a altura do header fixo — texto começa sempre abaixo do logo */
+  .page-hero__header-gap {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    height: var(--site-header-height);
+    pointer-events: none;
+  }
+
+  .page-hero__content {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    padding: var(--page-hero-text-offset) 0 4rem;
+  }
+
+  @media (min-width: 640px) {
+    .page-hero__content {
+      padding: var(--page-hero-text-offset) 0 4rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .page-hero__content {
+      padding: var(--page-hero-text-offset) 0 4.5rem;
+    }
+  }
+
+  .page-hero__label {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #d4a054;
+  }
+
+  .page-hero__accent {
+    display: block;
+    width: 2.75rem;
+    height: 2px;
+    margin: 0.875rem 0 1.375rem;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #d4a054, rgb(212 160 84 / 35%));
+  }
+
+  @media (min-width: 640px) {
+    .page-hero__accent {
+      margin: 0.625rem 0 1rem;
+    }
+  }
+
+  .page-hero__title {
+    margin: 0;
+    max-width: 22ch;
+    font-family: Fraunces, Georgia, serif;
+    font-size: clamp(2.125rem, 5.5vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 640px) {
+    .page-hero__title {
+      line-height: 1.12;
+    }
+  }
+
+  .page-hero__description {
+    margin: 1.375rem 0 0;
+    max-width: 40rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgb(255 255 255 / 78%);
+  }
+
+  @media (min-width: 640px) {
+    .page-hero__description {
+      margin-top: 1rem;
+      line-height: 1.65;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .page-hero__description {
+      margin-top: 1.125rem;
+      font-size: 1.125rem;
+    }
+  }
+
+  .page-hero__inner :global(.btn-primary) {
+    margin-top: 1.75rem;
+  }
+</style>

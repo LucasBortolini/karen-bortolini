@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import ServiceAccordion from '../components/ServiceAccordion.astro';
 import { buildServiceGroups } from '../lib/services';
@@ -11,17 +12,17 @@ const serviceGroups = buildServiceGroups(await getCollection('services'));
 <BaseLayout
   title="Serviços | Karen Bortolini"
   description="Comunicação estratégica, conteúdo multimídia, assessoria de imprensa, design instrucional e EaD."
+  transparentHeader
 >
-  <Section variant="white" class="pt-8">
-    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">Serviços</p>
-    <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Como posso ajudar</h1>
-    <p class="mt-4 max-w-2xl text-lg text-secondary">
-      Soluções em comunicação estratégica, produção multimídia e educação digital para empresas,
-      instituições e projetos acadêmicos. Toque em um card para ver os detalhes.
-    </p>
-  </Section>
+  <PageHero
+    image="/images/banners/servicos.jpg"
+    label="Serviços"
+    title="Como posso ajudar"
+    description="Soluções em comunicação estratégica, produção multimídia e educação digital para empresas, instituições e projetos acadêmicos. Toque em um card para ver os detalhes."
+    imagePosition="center 40%"
+  />
 
-  <Section variant="light">
+  <Section variant="light" class="!pt-8 md:!pt-10">
     <ServiceAccordion groups={serviceGroups} columnId="servicos" />
   </Section>
 </BaseLayout>

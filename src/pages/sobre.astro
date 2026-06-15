@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import Timeline from '../components/Timeline.astro';
 import { getSiteSettings } from '../lib/site';
@@ -22,13 +23,18 @@ const courses = education
 <BaseLayout
   title="Sobre | Karen Bortolini"
   description="Pós-doutora em Comunicação. Trajetória em comunicação estratégica, multimídia e educação digital."
+  transparentHeader
 >
-  <Section variant="white" class="pt-8">
-    <div class="mx-auto max-w-3xl">
-      <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">Sobre</p>
-      <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Karen Bortolini</h1>
-      <p class="mt-2 text-lg text-secondary">{settings.tagline}</p>
+  <PageHero
+    image="/images/banners/sobre.jpg"
+    label="Sobre"
+    title="Karen Bortolini"
+    description={settings.tagline}
+    imagePosition="center 35%"
+  />
 
+  <Section variant="white" class="!pt-8 md:!pt-10">
+    <div class="mx-auto max-w-3xl">
       <div class="mt-8 space-y-4 text-base leading-relaxed text-secondary">
         {settings.aboutBio.map((paragraph) => <p>{paragraph}</p>)}
       </div>

@@ -2,11 +2,22 @@
 import { getSiteSettings, navLinks } from '../lib/site';
 import MobileNav from './MobileNav';
 
+interface Props {
+  overlay?: boolean;
+}
+
+const { overlay = false } = Astro.props;
 const settings = await getSiteSettings();
 ---
 
-<header class="section-dark sticky top-0 z-50 border-b border-white/10">
-  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+<header
+  class:list={[
+    'site-header z-50 top-0 inset-x-0',
+    overlay ? 'site-header--overlay fixed' : 'section-dark sticky border-b border-white/10',
+  ]}
+  data-header-overlay={overlay ? 'true' : undefined}
+>
+  <div class="site-container flex items-center justify-between py-4">
     <a href="/" class="shrink-0">
       <img
         src="/logo.png"
@@ -34,3 +45,63 @@ const settings = await getSiteSettings();
     <MobileNav client:load navLinks={[...navLinks]} />
   </div>
 </header>
+
+<script>
+  function syncHeaderHeight() {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+
+    const height = Math.ceil(header.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--site-header-height', `${height}px`);
+  }
+
+  function initHeader() {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+
+    syncHeaderHeight();
+
+    if (header.dataset.headerInit !== 'true') {
+      header.dataset.headerInit = 'true';
+
+      new ResizeObserver(syncHeaderHeight).observe(header);
+      window.addEventListener('resize', syncHeaderHeight, { passive: true });
+      document.fonts?.ready?.then(syncHeaderHeight);
+
+      if (header.dataset.headerOverlay === 'true') {
+        const threshold = 24;
+
+        const updateScroll = () => {
+          header.classList.toggle('site-header--scrolled', window.scrollY > threshold);
+        };
+
+        updateScroll();
+        window.addEventListener('scroll', updateScroll, { passive: true });
+        document.addEventListener('astro:page-load', updateScroll);
+      }
+    }
+  }
+
+  initHeader();
+  document.addEventListener('astro:page-load', () => {
+    initHeader();
+    syncHeaderHeight();
+  });
+</script>
+
+<style>
+  .site-header--overlay {
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .site-header--overlay.site-header--scrolled {
+    background-color: rgb(31 58 95);
+    border-bottom-color: rgb(255 255 255 / 10%);
+    box-shadow: 0 4px 20px rgb(15 23 42 / 18%);
+  }
+</style>

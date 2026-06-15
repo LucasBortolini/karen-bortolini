@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import AcademicList from '../components/AcademicList.astro';
 import { getCollection } from 'astro:content';
@@ -19,20 +20,17 @@ const items = academic.map((a) => ({
 <BaseLayout
   title="Produção acadêmica | Karen Bortolini"
   description="Artigos científicos, capítulos de livros, tese de doutorado e videoaulas de Karen Bortolini."
+  transparentHeader
 >
-  <Section variant="white" class="pt-8">
-    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">
-      Produção acadêmica
-    </p>
-    <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">
-      Pesquisa e materiais didáticos
-    </h1>
-    <p class="mt-4 max-w-2xl text-lg text-secondary">
-      Publicações, tese e trechos de aulas em instituições de ensino superior.
-    </p>
-  </Section>
+  <PageHero
+    image="/images/banners/academica.jpg"
+    label="Produção acadêmica"
+    title="Pesquisa e materiais didáticos"
+    description="Publicações, tese e trechos de aulas em instituições de ensino superior."
+    imagePosition="center 30%"
+  />
 
-  <Section variant="light">
+  <Section variant="light" class="!pt-8 md:!pt-10">
     <AcademicList items={items} groupByType={true} />
   </Section>
 

@@ -9,9 +9,11 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  transparentHeader?: boolean;
 }
 
-const { title, description, ogImage = '/og-default.svg' } = Astro.props;
+const { title, description, ogImage = '/og-default.svg', transparentHeader = false } =
+  Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -39,7 +41,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <ViewTransitions />
   </head>
   <body class="min-h-screen flex flex-col">
-    <Header />
+    <Header overlay={transparentHeader} />
     <main class="flex-1" transition:animate="fade">
       <slot />
     </main>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import { getSiteSettings, whatsappUrl } from '../lib/site';
 
@@ -13,25 +14,17 @@ const waLink = whatsappUrl(
 <BaseLayout
   title="Contato | Karen Bortolini"
   description="Entre em contato com Karen Bortolini por WhatsApp, e-mail, Instagram ou LinkedIn."
+  transparentHeader
 >
-  <Section variant="white" class="pt-8">
-    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-gold">Contato</p>
-    <h1 class="font-display text-4xl font-bold text-primary md:text-5xl">Vamos conversar</h1>
-    <p class="mt-4 max-w-2xl text-lg text-secondary">
-      Tire dúvidas sobre serviços, projetos acadêmicos ou parcerias institucionais. Prefira
-      WhatsApp ou e-mail — resposta o mais breve possível.
-    </p>
-    <a
-      href={waLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="btn-primary mt-8 inline-flex"
-    >
-      Chamar no WhatsApp
-    </a>
-  </Section>
+  <PageHero
+    image="/images/banners/contato.jpg"
+    label="Contato"
+    title="Vamos conversar"
+    description="Tire dúvidas sobre serviços, projetos acadêmicos ou parcerias institucionais. Prefira WhatsApp ou e-mail — resposta o mais breve possível."
+    imagePosition="center 40%"
+  />
 
-  <Section variant="light" title="Canais de contato">
+  <Section variant="light" title="Canais de contato" class="!pt-8 md:!pt-10">
     <ul class="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2">
       <li class="card">
         <p class="text-sm font-semibold text-gold">WhatsApp</p>

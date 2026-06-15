@@ -12,6 +12,24 @@
   --color-whatsapp-surface: #ece5dd;
   --color-whatsapp-brand: #075e54;
   --color-recording: #e02424;
+  /* Fallback until Header script measures the real height */
+  --site-header-height: 5rem;
+  --page-hero-text-offset: 3.5rem;
+  --site-gutter: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --site-header-height: 5.5rem;
+    --page-hero-text-offset: 3rem;
+    --site-gutter: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --site-gutter: 2rem;
+  }
 }
 
 @layer base {
@@ -87,6 +105,13 @@
 }
 
 @layer components {
+  .site-container {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--site-gutter);
+  }
+
   .btn-primary {
     @apply inline-flex items-center justify-center rounded-lg bg-cta px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-cta/90 focus:outline-none focus:ring-2 focus:ring-cta focus:ring-offset-2;
   }
