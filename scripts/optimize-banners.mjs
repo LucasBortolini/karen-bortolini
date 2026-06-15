@@ -11,17 +11,25 @@ const files = (await readdir(SOURCE_DIR)).filter((file) => /\.jpe?g$/i.test(file
 
 for (const file of files) {
   const input = path.join(SOURCE_DIR, file);
-
-  const { data, info } = await sharp(input)
+  const buffer = await sharp(input)
     .rotate()
     .resize(MAX_WIDTH, null, { withoutEnlargement: true })
     .jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
-    .toBuffer({ resolveWithObject: true });
+    .toBuffer();
 
   for (const outputDir of OUTPUT_DIRS) {
     await mkdir(outputDir, { recursive: true });
-    await writeFile(path.join(outputDir, file), data);
-    const kb = Math.round(data.length / 1024);
-    console.log(`${file} → ${outputDir}: ${info.width}x${info.height}, ${kb} KB`);
+    await writeFile(path.join(outputDir, file), buffer);
+    const kb = Math.round(buffer.length / 1024);
+    console.log(`${file} → ${outputDir}: ${kb} KB`);
   }
+}
+
+const ogSource = path.join(OUTPUT_DIRS[0], 'sobre.jpg');
+if (files.includes('sobre.jpg')) {
+  await sharp(ogSource)
+    .resize(1200, 630, { fit: 'cover', position: 'centre' })
+    .jpeg({ quality: 82, mozjpeg: true })
+    .toFile('public/og-default.jpg');
+  console.log('og-default.jpg → public/ (1200x630)');
 }

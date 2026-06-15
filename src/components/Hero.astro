@@ -7,13 +7,7 @@ const settings = await getSiteSettings();
 <section class="relative overflow-hidden bg-surface py-10 md:py-14">
   <div class="site-container grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
     <div class="fade-in order-2 lg:order-1">
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-gold">
-        {settings.heroSubtitle}
-      </p>
-      <h1 class="font-display text-3xl font-bold leading-tight text-primary sm:text-4xl md:text-5xl">
-        {settings.heroTitle}
-      </h1>
-      <div class="mt-4 space-y-4 text-base leading-relaxed text-secondary md:text-lg">
+      <div class="space-y-4 text-base leading-relaxed text-secondary md:text-lg">
         {settings.heroParagraphs.map((paragraph) => (
           <p>{paragraph}</p>
         ))}

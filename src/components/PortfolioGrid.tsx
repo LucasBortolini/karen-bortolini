@@ -78,7 +78,7 @@ export default function PortfolioGrid({ items }: Props) {
                 {item.thumb ? (
                   <img
                     src={item.thumb}
-                    alt=""
+                    alt={`Capa do projeto ${item.title}`}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                   />

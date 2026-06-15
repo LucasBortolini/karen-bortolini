@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import PageHero from '../components/PageHero.astro';
 import Pillars from '../components/Pillars.astro';
 import Section from '../components/Section.astro';
 import ServiceAccordion from '../components/ServiceAccordion.astro';
 import PortfolioCard from '../components/PortfolioCard.astro';
 import ClientLogos from '../components/ClientLogos.astro';
+import { pageBanners } from '../lib/banners';
 import { getSiteSettings } from '../lib/site';
 import { buildServiceGroups } from '../lib/services';
 import { getCollection } from 'astro:content';
@@ -22,7 +24,21 @@ const portfolioFeatured = (await getCollection('portfolio'))
   .slice(0, 4);
 ---
 
-<BaseLayout title={settings.meta.homeTitle} description={settings.meta.homeDescription}>
+<BaseLayout
+  title={settings.meta.homeTitle}
+  description={settings.meta.homeDescription}
+  transparentHeader
+  bannerImage={pageBanners.home}
+  socialImage={pageBanners.home}
+>
+  <PageHero
+    image={pageBanners.home}
+    label={settings.siteName}
+    title={settings.heroTitle}
+    description={settings.heroSubtitle}
+    imagePosition="center center"
+  />
+
   <Hero />
   <Pillars />
 

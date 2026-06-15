@@ -5,12 +5,15 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { getBannerImageAssets } from '../lib/banner-image';
+import { buildSiteJsonLd, getSocialImage } from '../lib/seo';
+import { getSiteSettings } from '../lib/site';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  socialImage?: ImageMetadata;
   transparentHeader?: boolean;
   bannerImage?: ImageMetadata;
 }
@@ -18,16 +21,26 @@ interface Props {
 const {
   title,
   description,
-  ogImage = '/og-default.svg',
+  ogImage,
+  socialImage,
   transparentHeader = false,
   bannerImage,
 } = Astro.props;
+
+const settings = await getSiteSettings();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteName = settings.siteName;
+
+const ogImageSource = bannerImage ?? socialImage;
+const resolvedOgImage = ogImageSource
+  ? new URL((await getSocialImage(ogImageSource)).src, Astro.site).href
+  : new URL(ogImage ?? '/og-default.jpg', Astro.site).href;
+
+const bannerAssets = bannerImage ? await getBannerImageAssets(bannerImage) : null;
+const jsonLd = buildSiteJsonLd(settings);
 
 const fontsUrl =
   'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap';
-
-const bannerAssets = bannerImage ? await getBannerImageAssets(bannerImage) : null;
 ---
 
 <!doctype html>
@@ -35,6 +48,7 @@ const bannerAssets = bannerImage ? await getBannerImageAssets(bannerImage) : nul
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1f3a5f" />
     {
       bannerAssets && (
         <link
@@ -56,15 +70,25 @@ const bannerAssets = bannerImage ? await getBannerImageAssets(bannerImage) : nul
     <noscript>
       <link rel="stylesheet" href={fontsUrl} />
     </noscript>
+    <link rel="me" href={settings.linkedin} />
+    <link rel="me" href={settings.instagramUrl} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="pt_BR" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <ViewTransitions />
   </head>
   <body class="min-h-screen flex flex-col">
