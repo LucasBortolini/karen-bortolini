@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import Timeline from '../components/Timeline.astro';
+import { pageBanners } from '../lib/banners';
 import { getSiteSettings } from '../lib/site';
 import { getCollection } from 'astro:content';
 
@@ -24,9 +25,10 @@ const courses = education
   title="Sobre | Karen Bortolini"
   description="Pós-doutora em Comunicação. Trajetória em comunicação estratégica, multimídia e educação digital."
   transparentHeader
+  bannerImage={pageBanners.sobre}
 >
   <PageHero
-    image="/images/banners/sobre.jpg"
+    image={pageBanners.sobre}
     label="Sobre"
     title="Karen Bortolini"
     description={settings.tagline}

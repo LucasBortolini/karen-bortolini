@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
+import { pageBanners } from '../lib/banners';
 import { getSiteSettings, whatsappUrl } from '../lib/site';
 
 const settings = await getSiteSettings();
@@ -15,9 +16,10 @@ const waLink = whatsappUrl(
   title="Contato | Karen Bortolini"
   description="Entre em contato com Karen Bortolini por WhatsApp, e-mail, Instagram ou LinkedIn."
   transparentHeader
+  bannerImage={pageBanners.contato}
 >
   <PageHero
-    image="/images/banners/contato.jpg"
+    image={pageBanners.contato}
     label="Contato"
     title="Vamos conversar"
     description="Tire dúvidas sobre serviços, projetos acadêmicos ou parcerias institucionais. Prefira WhatsApp ou e-mail — resposta o mais breve possível."

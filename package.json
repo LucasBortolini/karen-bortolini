@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "optimize:banners": "node scripts/optimize-banners.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "sharp": "^0.34.1",
     "typescript": "^5.8.0"
   }
 }

@@ -1,8 +1,10 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import type { ImageMetadata } from 'astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { getBannerImageAssets } from '../lib/banner-image';
 import '../styles/global.css';
 
 interface Props {
@@ -10,11 +12,22 @@ interface Props {
   description: string;
   ogImage?: string;
   transparentHeader?: boolean;
+  bannerImage?: ImageMetadata;
 }
 
-const { title, description, ogImage = '/og-default.svg', transparentHeader = false } =
-  Astro.props;
+const {
+  title,
+  description,
+  ogImage = '/og-default.svg',
+  transparentHeader = false,
+  bannerImage,
+} = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const fontsUrl =
+  'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap';
+
+const bannerAssets = bannerImage ? await getBannerImageAssets(bannerImage) : null;
 ---
 
 <!doctype html>
@@ -22,13 +35,27 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {
+      bannerAssets && (
+        <link
+          rel="preload"
+          as="image"
+          href={bannerAssets.preload.href}
+          imagesrcset={bannerAssets.preload.srcset}
+          imagesizes="100vw"
+          type="image/webp"
+          fetchpriority="high"
+        />
+      )
+    }
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" as="style" href={fontsUrl} />
+    <link rel="stylesheet" href={fontsUrl} media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href={fontsUrl} />
+    </noscript>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
@@ -42,7 +69,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body class="min-h-screen flex flex-col">
     <Header overlay={transparentHeader} />
-    <main class="flex-1" transition:animate="fade">
+    <main class="flex-1" transition:animate={bannerImage ? 'none' : 'fade'}>
       <slot />
     </main>
     <Footer />

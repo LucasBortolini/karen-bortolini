@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import AcademicList from '../components/AcademicList.astro';
+import { pageBanners } from '../lib/banners';
 import { getCollection } from 'astro:content';
 
 const academic = (await getCollection('academic')).sort(
@@ -21,9 +22,10 @@ const items = academic.map((a) => ({
   title="Produção acadêmica | Karen Bortolini"
   description="Artigos científicos, capítulos de livros, tese de doutorado e videoaulas de Karen Bortolini."
   transparentHeader
+  bannerImage={pageBanners.academica}
 >
   <PageHero
-    image="/images/banners/academica.jpg"
+    image={pageBanners.academica}
     label="Produção acadêmica"
     title="Pesquisa e materiais didáticos"
     description="Publicações, tese e trechos de aulas em instituições de ensino superior."

@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import ServiceAccordion from '../components/ServiceAccordion.astro';
+import { pageBanners } from '../lib/banners';
 import { buildServiceGroups } from '../lib/services';
 import { getCollection } from 'astro:content';
 
@@ -13,9 +14,10 @@ const serviceGroups = buildServiceGroups(await getCollection('services'));
   title="Serviços | Karen Bortolini"
   description="Comunicação estratégica, conteúdo multimídia, assessoria de imprensa, design instrucional e EaD."
   transparentHeader
+  bannerImage={pageBanners.servicos}
 >
   <PageHero
-    image="/images/banners/servicos.jpg"
+    image={pageBanners.servicos}
     label="Serviços"
     title="Como posso ajudar"
     description="Soluções em comunicação estratégica, produção multimídia e educação digital para empresas, instituições e projetos acadêmicos. Toque em um card para ver os detalhes."

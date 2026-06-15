@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import PortfolioGrid from '../components/PortfolioGrid';
+import { pageBanners } from '../lib/banners';
 import { getCollection } from 'astro:content';
 import { youtubeThumbnail } from '../lib/utils';
 
@@ -24,9 +25,10 @@ const items = portfolio.map((p) => ({
   title="Portfólio | Karen Bortolini"
   description="Produções audiovisuais, editoriais e institucionais — telejornal, documentários, boletins e revistas."
   transparentHeader
+  bannerImage={pageBanners.portifolio}
 >
   <PageHero
-    image="/images/banners/portifolio.jpg"
+    image={pageBanners.portifolio}
     label="Portfólio"
     title="Trabalhos realizados"
     description="Seleção de projetos em vídeo, editorial e materiais institucionais."
